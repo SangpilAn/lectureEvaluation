@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+  <definition name="root.*" template="/WEB-INF/view/inc/layout.jsp">
+    <put-attribute name="title" value="Tiles tutorial homepage" />
+    <put-attribute name="nav" value="/WEB-INF/view/inc/nav.jsp" />
+    <put-attribute name="body" value="/WEB-INF/view/{1}.jsp" />
+    <put-attribute name="evaluationModal" value="/WEB-INF/view/inc/evaluationModal.jsp" />
+    <put-attribute name="reportModal" value="/WEB-INF/view/inc/reportModal.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/view/inc/footer.jsp" />
+  </definition>
+  <definition name="user.*" template="/WEB-INF/view/user/inc/layout.jsp">
+    <put-attribute name="title" value="회원 관리" />
+    <put-attribute name="nav" value="/WEB-INF/view/user/inc/nav.jsp" />
+    <put-attribute name="body" value="/WEB-INF/view/user/jsp/{1}.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/view/inc/footer.jsp" />
+  </definition>
+</tiles-definitions>
