@@ -7,14 +7,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import lectureEvaluation.web.entity.Evaluation;
 import lectureEvaluation.web.service.EvaluationService;
 
+@Service
 public class JDBCEvaluationService implements EvaluationService{
-	private String url = "jdbc:mysql://localhost:3306/lectureEvaluation?serverTimezone=UTC";
-	private String uid = "root";
-	private String pwd = "1234";
-	private String driver = "com.mysql.cj.jdbc.Driver";
+//	private String url = "jdbc:mysql://localhost:3306/lectureEvaluation?serverTimezone=UTC";
+//	private String uid = "root";
+//	private String pwd = "1234";
+//	private String driver = "com.mysql.cj.jdbc.Driver";
+	@Autowired
+	private DataSource dataSource;
+	
 	@Override
 	public int write(Evaluation evaluation) throws ClassNotFoundException, SQLException {
 		String userID=evaluation.getUserID();
@@ -33,8 +42,9 @@ public class JDBCEvaluationService implements EvaluationService{
 		String url="jdbc:mysql://localhost:3306/lectureEvaluation?serverTimezone=UTC";
 		String sql="insert into evaluation values(null,?,?,?,?,?,?,?,?,?,?,?,?,0)";
 		
-		Class.forName(driver);
-		Connection con=DriverManager.getConnection(url,uid,pwd);
+//		Class.forName(driver);
+//		Connection con = DriverManager.getConnection(url,uid, pwd);
+		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
 		st.setString(1, userID);
 		st.setString(2, lectureName);
@@ -71,8 +81,9 @@ public class JDBCEvaluationService implements EvaluationService{
 			sql="select * from evaluation where lectureDivide like ? and concat(lectureName,professorName,evaluationTitle,evaluationContent) like"+
 					"? Order by likeCount desc limit "+(pageNumber*5)+", "+(pageNumber*5+6);
 		}
-		Class.forName(driver);
-		Connection con=DriverManager.getConnection(url,uid,pwd);
+//		Class.forName(driver);
+//		Connection con = DriverManager.getConnection(url,uid, pwd);
+		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
 		st.setString(1, "%"+lectureDivide+"%");
 		st.setString(2, "%"+search+"%");
@@ -106,8 +117,9 @@ public class JDBCEvaluationService implements EvaluationService{
 	@Override
 	public int like(String evaluationID) throws ClassNotFoundException, SQLException {
 		String sql="update evaluation set likeCount=likeCount+1 where evaluationID=?";
-		Class.forName(driver);
-		Connection con=DriverManager.getConnection(url,uid,pwd);
+//		Class.forName(driver);
+//		Connection con = DriverManager.getConnection(url,uid, pwd);
+		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
 		st.setInt(1, Integer.parseInt(evaluationID) );
 		int result=st.executeUpdate();
@@ -118,8 +130,9 @@ public class JDBCEvaluationService implements EvaluationService{
 	@Override
 	public int delete(String evaluationID) throws ClassNotFoundException, SQLException {
 		String sql="delete from evaluation where evaluationID=?";
-		Class.forName(driver);
-		Connection con=DriverManager.getConnection(url,uid,pwd);
+//		Class.forName(driver);
+//		Connection con = DriverManager.getConnection(url,uid, pwd);
+		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
 		st.setInt(1, Integer.parseInt(evaluationID));
 		int result=st.executeUpdate();
@@ -131,8 +144,9 @@ public class JDBCEvaluationService implements EvaluationService{
 	@Override
 	public String getUserID(String evaluationID) throws ClassNotFoundException, SQLException {
 		String sql="delete from evaluation where evaluationID=?";
-		Class.forName(driver);
-		Connection con=DriverManager.getConnection(url,uid,pwd);
+//		Class.forName(driver);
+//		Connection con = DriverManager.getConnection(url,uid, pwd);
+		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
 		st.setInt(1, Integer.parseInt(evaluationID));
 		ResultSet rs=st.executeQuery();

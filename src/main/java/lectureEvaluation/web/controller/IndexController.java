@@ -19,6 +19,7 @@ public class IndexController{
 
 	@RequestMapping("index")
 	public String index(String lectureDivide, String searchType, String search, ModelMap modelMap) throws ClassNotFoundException, SQLException {
+		// 리스트 출력
 		ArrayList<Evaluation> list=null;
 		if(lectureDivide!=null) {
 			list=evaluationService.getList(lectureDivide,

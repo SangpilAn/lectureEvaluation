@@ -10,7 +10,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="./evaluationRegisterAction.jsp" method="post">
+					<form action="/inc/evaluation" method="post" name="evaluation">
 						<div class="form-row">
 							<div class="form-group col-sm-6">
 								<label>강의명</label>
