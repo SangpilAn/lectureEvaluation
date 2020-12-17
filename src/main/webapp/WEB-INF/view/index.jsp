@@ -19,7 +19,7 @@
 			<a class="btn btn-danger mx-1 mt-2" data-toggle="modal" href="#reportModal">신고하기</a>
 		</form>
 		
-		<c:forEach var="n" items="${list }">
+		<c:forEach var="n" items="${list }" begin="0" end="4" step="1" >
 		<div class="card bg-light mt-3">
 			<div class="card-header bg-light">
 				<div class="row">
@@ -53,9 +53,28 @@
 	
 	<ul class="pagination justify-content-center mt-3">
 		<li class="page-item">
-			<a class="page-link disabled">이전</a>
+		<c:choose>
+			<c:when test="${pageNum<=0||pageNum==null }">
+				<a class="page-link disabled">이전</a>
+			</c:when>
+			<c:otherwise>
+				<a class="page-link" href="index?lectureDivide=${lectureDivide_m}&searchType=${searchType_m}&search=${search_m}&pageNum=${pageNum-1 }">이전</a>
+			</c:otherwise>
+		</c:choose>
 		</li>
+		<c:forEach var="n" items="${list }" varStatus="status">
 		<li class="page-item">
-			<a class="page-link disabled">다음</a>
+			<a class="page-link">${status.index }</a>	
+		</li>
+		</c:forEach>
+		<li class="page-item">
+		<c:choose>
+			<c:when test="${list.size()<6 }">
+				<a class="page-link disabled">다음</a>
+			</c:when>
+			<c:otherwise>
+				<a class="page-link" href="index?lectureDivide=${lectureDivide_m}&searchType=${searchType_m}&search=${search_m}&pageNum=${pageNum+1 }">다음</a>
+			</c:otherwise>
+		</c:choose>
 		</li>
 	</ul>

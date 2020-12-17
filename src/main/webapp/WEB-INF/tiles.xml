@@ -4,7 +4,7 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
   <definition name="root.*" template="/WEB-INF/view/inc/layout.jsp">
-    <put-attribute name="title" value="Tiles tutorial homepage" />
+    <put-attribute name="title" value="강의 평가 사이트" />
     <put-attribute name="nav" value="/WEB-INF/view/inc/nav.jsp" />
     <put-attribute name="body" value="/WEB-INF/view/{1}.jsp" />
     <put-attribute name="evaluationModal" value="/WEB-INF/view/inc/evaluationModal.jsp" />

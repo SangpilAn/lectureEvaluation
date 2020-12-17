@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initail-scale=1,shrink-to-fit=no">
-	<title></title>
+	<title><tiles:getAsString name="title"/></title>
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/custom.css">
 </head>
