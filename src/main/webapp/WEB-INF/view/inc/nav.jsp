@@ -16,8 +16,8 @@
 						회원관리
 					</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown">
-						<a class="dropdown-item" href="user/jsp/userLogin">로그인</a>
-						<a class="dropdown-item" href="user/jsp/userReg">회원가입</a>					
+						<a class="dropdown-item" href="user/userLogin">로그인</a>
+						<a class="dropdown-item" href="user/userReg">회원가입</a>					
 						<a class="dropdown-item" href="userLogout.jsp">로그아웃</a>
 					</div>
 				</li>
