@@ -22,7 +22,7 @@ public class JDBCUserService implements UserService {
 	@Override
 	public int login(String userID, String userPassword) throws SQLException {
 		
-		int result=-2;	// 데이터베이스 오류
+		int result=4;	// 데이터베이스 오류
 		String sql="select userpassword from user where userID=?";
 		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
