@@ -62,11 +62,29 @@
 			</c:otherwise>
 		</c:choose>
 		</li>
-		<c:forEach var="n" items="${list }" varStatus="status">
-		<li class="page-item">
-			<a class="page-link">${status.index }</a>	
-		</li>
-		</c:forEach>
+		<c:choose>
+			<c:when test="${size-1>0 }">
+				<c:forEach begin="0" end="${size-1 }" step="1" var="n">
+					<c:choose>
+						<c:when test="${pageNum==n||pageNum==null }">
+							<li class="page-item">
+								<a class="page-link" >${n+1 }</a>	
+							</li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item">
+								<a class="page-link" href="index?lectureDivide=${lectureDivide_m}&searchType=${searchType_m}&search=${search_m}&pageNum=${n }">${n+1 }</a>	
+							</li>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<li class="page-item">
+					<a class="page-link" >1</a>	
+				</li>
+			</c:otherwise>
+		</c:choose>
 		<li class="page-item">
 		<c:choose>
 			<c:when test="${list.size()<6 }">

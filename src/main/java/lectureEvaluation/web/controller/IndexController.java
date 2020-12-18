@@ -33,6 +33,17 @@ public class IndexController{
 		modelMap.addAttribute("searchType_m", searchType);
 		modelMap.addAttribute("search_m", search);
 		modelMap.addAttribute("list", list);
+		ArrayList<Evaluation> pagingList=evaluationService.getList(lectureDivide, searchType, search, 0);
+		int page=0;
+		for(int i=1;i<pagingList.size()+1;i++) {
+			if(i==1) {
+				page+=1;
+			}else if(i!=1&&i%5==1) {
+				page+=1;
+			}
+		}
+		System.out.println(page);
+		modelMap.addAttribute("size", page);
 		return "root.index";
 	}
 	
