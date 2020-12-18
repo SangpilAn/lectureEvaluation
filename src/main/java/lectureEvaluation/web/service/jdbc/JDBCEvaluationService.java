@@ -159,6 +159,29 @@ public class JDBCEvaluationService implements EvaluationService{
 		con.close();
 		return result;
 	}
+	@Override
+	public int getAllList() throws ClassNotFoundException, SQLException {
+		String sql="select evaluationID from evaluation";
+		Connection con=dataSource.getConnection();
+		PreparedStatement st=con.prepareStatement(sql);
+		ResultSet rs=st.executeQuery();
+		int temp=0;
+		int result=0;
+		while(rs.next()) {
+			temp+=1;
+		}
+		for(int i=1;i<temp+1;i++) {
+			if(i==1) {
+				result+=1;
+			}else if(i!=1&&i%5==1) {
+				result+=1;
+			}
+		}
+		rs.close();
+		st.close();
+		con.close();
+		return result;
+	}
 	
 	
 }
