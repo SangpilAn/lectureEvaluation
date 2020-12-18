@@ -11,5 +11,5 @@ public interface EvaluationService {
 	public int like(String evaluationID)throws ClassNotFoundException, SQLException;
 	public int delete(String evaluationID)throws ClassNotFoundException, SQLException;
 	public String getUserID(String evaluationID)throws ClassNotFoundException, SQLException;
-	public int getAllList()throws ClassNotFoundException, SQLException;
+	public int getPage(String lectureDivide,String searchType,String search)throws ClassNotFoundException, SQLException;
 }

@@ -42,7 +42,7 @@ public class IndexController{
 		modelMap.addAttribute("searchType_m", searchType);
 		modelMap.addAttribute("search_m", search);
 		modelMap.addAttribute("list", list);
-		int page=evaluationService.getAllList();
+		int page=evaluationService.getPage(lectureDivide,searchType,search);
 		modelMap.addAttribute("size", page);
 		return "root.index";
 	}

@@ -160,10 +160,22 @@ public class JDBCEvaluationService implements EvaluationService{
 		return result;
 	}
 	@Override
-	public int getAllList() throws ClassNotFoundException, SQLException {
-		String sql="select evaluationID from evaluation";
+	public int getPage(String lectureDivide,String searchType,String search) throws ClassNotFoundException, SQLException {
+		if(lectureDivide.equals("전체")) {
+			lectureDivide="";
+		}
+		String sql="";
+		if(searchType.equals("최신순")) {
+			sql="select * from evaluation where lectureDivide like ? and concat(lectureName,professorName,evaluationTitle,evaluationContent) like"+
+					"?";
+		}else if(searchType.equals("추천순")) {
+			sql="select * from evaluation where lectureDivide like ? and concat(lectureName,professorName,evaluationTitle,evaluationContent) like"+
+					"?";
+		}
 		Connection con=dataSource.getConnection();
 		PreparedStatement st=con.prepareStatement(sql);
+		st.setString(1, "%"+lectureDivide+"%");
+		st.setString(2, "%"+search+"%");
 		ResultSet rs=st.executeQuery();
 		int temp=0;
 		int result=0;
