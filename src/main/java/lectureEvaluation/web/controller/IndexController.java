@@ -42,27 +42,8 @@ public class IndexController{
 				page+=1;
 			}
 		}
-		System.out.println(page);
 		modelMap.addAttribute("size", page);
 		return "root.index";
 	}
-	
-//	@Override
-//	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		ModelAndView mv=new ModelAndView("root.index");
-//		mv.addObject("data","Hello Spring MVC");
-//		ArrayList<Evaluation> list=null;
-//		if(request.getParameter("lectureDivide")!=null) {
-//			mv.addObject("lectureDivide_m", request.getParameter("lectureDivide"));
-//			mv.addObject("searchType_m", request.getParameter("searchType"));
-//			list=evaluationService.getList(request.getParameter("lectureDivide"),
-//					request.getParameter("searchType"),request.getParameter("search"), 0);
-//		}else {
-//			list=evaluationService.getList("", "ÃÖ½Å¼ø", "", 0);
-//		}
-//		
-//		mv.addObject("list",list);
-//		return mv;
-//	}
 
 }

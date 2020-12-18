@@ -1,7 +1,6 @@
 package lectureEvaluation.web.service.jdbc;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +38,7 @@ public class JDBCEvaluationService implements EvaluationService{
 		String comfortableScore=evaluation.getComfortableScore();
 		String lectureScore=evaluation.getLectureScore();
 		
-		String url="jdbc:mysql://localhost:3306/lectureEvaluation?serverTimezone=UTC";
+//		String url="jdbc:mysql://localhost:3306/lectureEvaluation?serverTimezone=UTC";
 		String sql="insert into evaluation values(null,?,?,?,?,?,?,?,?,?,?,?,?,0)";
 		
 //		Class.forName(driver);
