@@ -46,24 +46,32 @@ public class JDBCUserService implements UserService {
 
 	@Override
 	public int reg(User user) throws SQLException {
-		
-		String userId=user.getUserID();
-		String userPassword=user.getUserPassword();
-		String userEmail=user.getUserEmail();
-		String userEmailHash=user.getUserEmailHash();
-		
 		int result=0; //회원가입 실패
-		String sql="insert into user values (?,?,?,?,false)";
-		Connection con=dataSource.getConnection();
-		PreparedStatement st=con.prepareStatement(sql);
-		st.setString(1, userId);
-		st.setString(2, userPassword);
-		st.setString(3, userEmail);
-		st.setString(4, userEmailHash);
-		result=st.executeUpdate();
+		String sql="";
+		Connection con=null;
+		PreparedStatement st=null;
+		if(getUser(user.getUserID())==true) {
+			result=-1;
+		}else {
+			String userId=user.getUserID();
+			String userPassword=user.getUserPassword();
+			String userEmail=user.getUserEmail();
+			String userEmailHash=user.getUserEmailHash();
+			
+			
+			sql="insert into user values (?,?,?,?,false)";
+			con=dataSource.getConnection();
+			st=con.prepareStatement(sql);
+			st.setString(1, userId);
+			st.setString(2, userPassword);
+			st.setString(3, userEmail);
+			st.setString(4, userEmailHash);
+			result=st.executeUpdate();
+			
+			st.close();
+			con.close();
+		}
 		
-		st.close();
-		con.close();
 		
 		return result;
 	}
@@ -121,6 +129,20 @@ public class JDBCUserService implements UserService {
 		st.close();
 		con.close();
 		
+		return result;
+	}
+
+	@Override
+	public boolean getUser(String userID) throws SQLException {
+		boolean result=false;
+		String sql="select * from user where userID=?";
+		Connection con=dataSource.getConnection();
+		PreparedStatement st=con.prepareStatement(sql);
+		st.setString(1, userID);
+		ResultSet rs=st.executeQuery();
+		if(rs.next()) {
+			result=true;
+		}
 		return result;
 	}
 

@@ -9,10 +9,11 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lectureEvaluation.web.entity.User;
 import lectureEvaluation.web.service.UserService;
+import lectureEvaluation.web.util.SHA256;
 
 @Controller
 @RequestMapping("/user/")
@@ -22,7 +23,7 @@ public class UserController{
 	private UserService userService;
 
 	@RequestMapping("userLogin")
-	public String userLogin(String userID,String userPassword,HttpSession session,HttpServletResponse response,Model model) throws SQLException, IOException {
+	public String userLogin(String userID,String userPassword,HttpSession session,HttpServletResponse response) throws SQLException, IOException {
 		response.setCharacterEncoding("UTF-8"); 
 		response.setContentType("text/html; charset=UTF-8");
 		int result;
@@ -67,8 +68,33 @@ public class UserController{
 	}
 	
 	@RequestMapping("userReg")
-	public String userReg() {
-
+	public String userReg(String userID,String userPassword,String userEmail,
+			HttpSession session,HttpServletResponse response) throws SQLException, IOException {
+		response.setCharacterEncoding("UTF-8"); 
+		response.setContentType("text/html; charset=UTF-8");
+		int result;
+		if(userID!=null) {
+			User user=new User(userID,userPassword,userEmail,SHA256.getSHA256(userEmail),false);
+			result=userService.reg(user);
+			if(result==1) {
+				PrintWriter script=response.getWriter();
+				script.println("<script>");
+				script.println("alert('회원가입 성공! 로그인해 주세요.');");
+				script.println("location.href='userLogin';");
+				script.println("</script>");
+				script.close();
+				return "user.userLogin";
+			}else if(result==-1) {
+				PrintWriter script=response.getWriter();
+				script.println("<script>");
+				script.println("alert('이미 존재하는 아이디입니다.');");
+				script.println("history.back();");
+				script.println("</script>");
+				script.close();
+				return "user.userReg";
+			}
+			
+		}
 		return "user.userReg";
 	}
 	

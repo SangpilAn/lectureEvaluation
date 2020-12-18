@@ -10,4 +10,5 @@ public interface UserService {
 	public String getUserEmail(String userID) throws SQLException;
 	public boolean getUserEmailChecked(String userID) throws SQLException;
 	public boolean setUserEmailChecked(String userID) throws SQLException;
+	public boolean getUser(String userID) throws SQLException;
 }
