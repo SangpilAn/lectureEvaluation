@@ -79,6 +79,7 @@
 					</c:choose>
 				</c:forEach>
 			</c:when>
+			<c:when test="${size==0 }"></c:when>
 			<c:otherwise>
 				<li class="page-item">
 					<a class="page-link" >1</a>	

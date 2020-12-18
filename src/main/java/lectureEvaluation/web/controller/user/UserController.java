@@ -3,7 +3,15 @@ package lectureEvaluation.web.controller.user;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Properties;
 
+import javax.mail.Address;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lectureEvaluation.web.entity.User;
 import lectureEvaluation.web.service.UserService;
+import lectureEvaluation.web.util.Gmail;
 import lectureEvaluation.web.util.SHA256;
 
 @Controller
@@ -77,10 +86,10 @@ public class UserController{
 			User user=new User(userID,userPassword,userEmail,SHA256.getSHA256(userEmail),false);
 			result=userService.reg(user);
 			if(result==1) {
+				session.setAttribute("userID", userID);
 				PrintWriter script=response.getWriter();
 				script.println("<script>");
-				script.println("alert('회원가입 성공! 로그인해 주세요.');");
-				script.println("location.href='userLogin';");
+				script.println("location.href='emailSend';");
 				script.println("</script>");
 				script.close();
 				return "user.userLogin";
@@ -98,5 +107,97 @@ public class UserController{
 		return "user.userReg";
 	}
 	
-
+	@RequestMapping("emailSend")
+	public String emailSend(HttpSession session,HttpServletResponse response) throws SQLException, IOException {
+		response.setCharacterEncoding("UTF-8"); 
+		response.setContentType("text/html; charset=UTF-8");
+		String userID=(String) session.getAttribute("userID");
+		boolean emailChecked=userService.getUserEmailChecked(userID);
+		if(emailChecked==true){
+			PrintWriter script=response.getWriter();
+			script.println("<script>");
+			script.println("alert('이미 인증된 회원입니다.');");
+			script.println("location.href='../index';");
+			script.println("</script>");
+			script.close();
+		}
+		
+		// 메일 발송
+		String host="localhost:8081/";
+		String from ="asp4303@gmail.com";
+		String to = userService.getUserEmail(userID);
+		String subject="강의평가를 위한 이메일 인증 메일입니다.";
+		String content="다음 링크에 접속하여 이메일 인증을 진행하세요. "+
+			"<a href='"+host+"/user/emailCheck?code="+new SHA256().getSHA256(to)+"'>이메일 인증하기</a>";
+		Properties p=new Properties();
+		p.put("mail.smtp.user",from);
+		p.put("mail.smtp.host","smtp.googlemail.com");
+		p.put("mail.smtp.port","465");
+		p.put("mail.smtp.starttls.enable","true");
+		p.put("mail.smtp.auth","true");
+		p.put("mail.smtp.debug","true");
+		p.put("mail.smtp.socketFactory.port","465");
+		p.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+		p.put("mail.smtp.socketFactory.fallback","false");
+				
+		try{
+			Authenticator auth=new Gmail();
+			Session ses=Session.getInstance(p,auth);
+			ses.setDebug(true);
+			MimeMessage msg=new MimeMessage(ses);
+			msg.setSubject(subject);
+			Address fromAddr=new InternetAddress(from);
+			msg.setFrom(fromAddr);
+			Address toAddr=new InternetAddress(to);
+			msg.addRecipient(Message.RecipientType.TO,toAddr);
+			msg.setContent(content,"text/html;charset=UTF8");
+			Transport.send(msg);
+		}catch(Exception e){
+			e.printStackTrace();
+			PrintWriter script=response.getWriter();
+			script.println("<script>");
+			script.println("alert('오류가 발생했습니다.');");
+			script.println("history.back();");
+			script.println("</script>");
+			script.close();
+		}
+		
+		
+		
+		return "user.emailSendConfirm";
+	}
+	
+	@RequestMapping("emailSendConfirm")
+	public String emailSendConfirm() {
+		return "user.emailSendConfirm";
+	}
+	
+	@RequestMapping("emailCheck")
+	public String emailCheck(String code,HttpSession session,HttpServletResponse response) throws SQLException, IOException {
+		response.setCharacterEncoding("UTF-8"); 
+		response.setContentType("text/html; charset=UTF-8");
+		String userID=(String) session.getAttribute("userID");
+		String userEmail=userService.getUserEmail(userID);
+		
+		boolean isRight=(new SHA256().getSHA256(userEmail).equals(code))?true:false;
+		if(isRight==true){
+			userService.setUserEmailChecked(userID);
+			PrintWriter script=response.getWriter();
+			script.println("<script>");
+			script.println("alert('인증에 성공했습니다.');");
+			script.println("location.href='../../index';");
+			script.println("</script>");
+			script.close();
+			
+		}else{
+			PrintWriter script=response.getWriter();
+			script.println("<script>");
+			script.println("alert('유효하지 않은 코드입니다.');");
+			script.println("location.href='../../index';");
+			script.println("</script>");
+			script.close();
+			
+		}
+		return "user.emailCheck";
+	}
 }
